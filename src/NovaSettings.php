@@ -15,6 +15,9 @@ class NovaSettings extends Tool
     public function boot()
     {
         Nova::script('nova-settings', __DIR__ . '/../dist/js/entry.js');
+        Nova::translations(
+            lang_path('vendor/nova-settings/'.app()->getLocale().'.json')
+        );
     }
 
     public function menu(Request $request)

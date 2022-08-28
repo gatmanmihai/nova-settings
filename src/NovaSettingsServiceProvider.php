@@ -7,13 +7,10 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Nova\Http\Middleware\Authenticate;
 use Outl1ne\NovaSettings\Http\Middleware\Authorize;
-use Outl1ne\NovaTranslationsLoader\LoadsNovaTranslations;
 use Outl1ne\NovaSettings\Http\Middleware\SettingsPathExists;
 
 class NovaSettingsServiceProvider extends ServiceProvider
 {
-    use LoadsNovaTranslations;
-
     /**
      * Bootstrap any application services.
      *
@@ -22,7 +19,7 @@ class NovaSettingsServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
-        $this->loadTranslations(__DIR__ . '/../lang', 'nova-settings', true);
+        $this->loadJsonTranslationsFrom(lang_path('vendor/nova-settings'));
 
         if ($this->app->runningInConsole()) {
             // Publish migrations
@@ -34,6 +31,10 @@ class NovaSettingsServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__ . '/../config/' => config_path(),
             ], 'config');
+
+            $this->publishes([
+                __DIR__.'/../lang' => lang_path('vendor/nova-settings'),
+            ], 'nova-settings');
         }
     }
 
